@@ -1,0 +1,1042 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@600;700;800&family=Inter:wght@400;500&family=IBM+Plex+Mono:wght@500;600&display=swap');
+
+:root{
+  --bmc-navy: #123C69;
+  --bmc-navy-deep: #0B2C4D;
+  --bmc-sky: #29ABE2;
+  --bmc-accent: #F7941D;
+  --bmc-bg: #F5F8FC;
+  --bmc-text: #16232E;
+  --bmc-muted: #7186A0;
+  --bmc-border: #E3EAF3;
+}
+
+*{box-sizing:border-box}
+html,body{height:100%;background:var(--bmc-bg);color:var(--bmc-text);font-family:Inter,system-ui,Segoe UI,Roboto,Helvetica,Arial,sans-serif}
+
+/* Layout */
+.bmc-shell{display:flex;min-height:100vh}
+.bmc-sidebar{width:250px;background:var(--bmc-navy);color:#fff;padding:28px;flex-shrink:0;display:flex;flex-direction:column;justify-content:space-between}
+.bmc-content{flex:1;padding:28px 36px;background:transparent}
+.bmc-topbar{height:64px;display:flex;align-items:center;justify-content:space-between;padding:0 8px;margin-bottom:18px}
+
+/* Sidebar */
+.bmc-logo{display:flex;align-items:center;gap:12px}
+.bmc-logo img{width:48px;height:48px;border-radius:10px;object-fit:cover}
+.bmc-app-name{font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;color:#fff}
+.bmc-app-sub{font-size:12px;color:var(--bmc-sky)}
+
+.bmc-nav{margin-top:18px}
+.bmc-nav a{display:flex;gap:12px;align-items:center;padding:10px 8px;border-radius:8px;text-decoration:none;color:rgba(255,255,255,0.92);margin-bottom:6px}
+.bmc-nav a:hover{background:var(--bmc-navy-deep)}
+.bmc-nav .active{position:relative;background:transparent}
+.bmc-nav .active::before{content:'';position:absolute;left:-14px;top:8px;height:36px;width:14px;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='36'%3E%3Cpath d='M14 0 C2 12,2 24,14 36' stroke='%23F7941D' stroke-width='3' fill='none' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat center}
+
+.bmc-user{display:flex;gap:12px;align-items:center}
+.bmc-user img{width:42px;height:42px;border-radius:999px;object-fit:cover}
+.bmc-user .meta{font-size:13px}
+.bmc-user .meta .name{font-weight:600}
+.bmc-user .meta .role{font-size:12px;color:var(--bmc-sky)}
+
+/* Cards */
+.bmc-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin-bottom:20px}
+.card{background:#fff;border-radius:12px;padding:16px;box-shadow:0 6px 18px rgba(18,60,105,0.06);border:1px solid var(--bmc-border)}
+.card .top-line{height:6px;border-radius:6px 6px 0 0;margin:-16px -16px 12px  -16px}
+.stat-value{font-family:'IBM Plex Mono', monospace;font-weight:600;font-size:20px;color:var(--bmc-text)}
+.stat-label{font-size:13px;color:var(--bmc-muted)}
+
+/* Dashboard main panels */
+.panel-row{display:grid;grid-template-columns:2fr 1fr;gap:18px}
+
+/* Table */
+.table{width:100%;border-collapse:collapse;background:#fff;border-radius:8px;overflow:hidden}
+.table thead{background:#fbfdff}
+.table th, .table td{padding:12px 14px;border-bottom:1px solid var(--bmc-border);text-align:left}
+.avatar{width:40px;height:40px;border-radius:999px;background:var(--bmc-navy);display:inline-flex;align-items:center;justify-content:center;color:#fff;font-weight:700}
+.badge{display:inline-block;padding:6px 10px;border-radius:999px;font-size:12px}
+.badge-pemula{background:#EAF3FB;color:var(--bmc-navy)}
+.badge-beginner{background:rgba(247,148,29,0.12);color:var(--bmc-accent)}
+.badge-senior{background:#F1F5F9;color:var(--bmc-navy-deep)}
+
+/* Buttons */
+.btn{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:10px;font-weight:600;text-decoration:none}
+.btn-primary{background:var(--bmc-accent);color:#fff}
+.btn-primary:hover{filter:brightness(.95)}
+.btn-navy{background:var(--bmc-navy);color:#fff}
+.btn-ghost{background:transparent;border:1px solid var(--bmc-border);color:var(--bmc-text)}
+
+/* Absensi toggles */
+.status-group button{padding:6px 10px;border-radius:8px;border:1px solid var(--bmc-border);background:#fff}
+.status-hadir{background:#ECFDF5;color:#166534;border-color:#D1FAE5}
+.status-izin{background:rgba(41,171,226,0.08);color:var(--bmc-sky);border-color:rgba(41,171,226,0.18)}
+.status-sakit{background:rgba(245,158,11,0.12);color:#92400E;border-color:rgba(245,158,11,0.18)}
+.status-alpha{background:rgba(239,68,68,0.08);color:#B91C1C;border-color:rgba(239,68,68,0.12)}
+
+/* Responsive */
+@media (max-width:1024px){
+  .bmc-sidebar{width:80px;padding:16px}
+  .bmc-logo .text{display:none}
+  .bmc-grid{grid-template-columns:repeat(2,1fr)}
+  .panel-row{grid-template-columns:1fr}
+}
+
+/* Desktop: hide hamburger button */
+@media (min-width:641px){
+  .mobile-menu-btn{display:none!important}
+}
+
+/* Mobile / small-screen behavior */
+@media (max-width:640px){
+  .bmc-shell{flex-direction:column;}
+  /* Sidebar is an off-canvas left drawer by default */
+  .bmc-sidebar{
+    position:fixed;
+    left:0;
+    top:0;
+    bottom:0;
+    width:240px;
+    z-index:10001;
+    transform:translateX(-100%);
+    transition:transform .28s ease;
+    display:flex;
+    flex-direction:column;
+    padding:20px;
+    background:var(--bmc-navy);
+  }
+  .bmc-sidebar .bmc-logo{margin-bottom:12px}
+  .bmc-sidebar .bmc-nav{display:flex;flex-direction:column;gap:8px;overflow:auto}
+  .bmc-content{padding:16px;margin-left:0}
+  .bmc-grid{grid-template-columns:1fr}
+
+  /* Hamburger */
+  .mobile-menu-btn{display:inline-flex}
+  .mobile-menu-btn{font-size:22px;color:var(--bmc-navy-deep);background:transparent;border:none}
+
+  /* When opened */
+  .bmc-shell.menu-open .bmc-sidebar{transform:translateX(0);box-shadow:4px 0 30px rgba(6,11,29,0.25)}
+  .bmc-shell.menu-open::after{content:'';position:fixed;left:0;top:0;right:0;bottom:0;background:rgba(0,0,0,0.35);z-index:10000}
+  .bmc-shell.menu-open .bmc-content{filter:brightness(.95);transition:filter .28s ease}
+
+  /* Hide logout button on small screens, show hint */
+  .logout-btn{display:inline-block}
+  .logout-hint{display:none}
+  .logout-btn{display:inline-block}
+  .logout-hint{display:none}
+  .logout-btn{display:inline-block}
+  .logout-hint{display:none}
+  /* override to hide actual button and show hint */
+  .logout-btn{display:none!important}
+  .logout-hint{display:block!important;color:var(--bmc-muted);font-size:12px;margin-top:6px}
+
+  /* Profile dropdown */
+  .profile-toggle{display:inline-flex;background:transparent;border:none;font-size:18px;color:var(--bmc-navy-deep);padding:6px}
+  .profile-menu{display:none;position:absolute;right:10px;top:56px;background:#fff;border-radius:8px;box-shadow:0 8px 30px rgba(6,11,29,0.12);min-width:160px;z-index:10002}
+  .profile-menu a{display:block;padding:8px 12px;color:var(--bmc-text);text-decoration:none}
+  .profile-menu form{padding:8px 12px}
+  .profile-menu button{width:100%;padding:8px;border-radius:8px;border:1px solid var(--bmc-border);background:#fff;color:var(--bmc-text)}
+  .profile-menu.show{display:block}
+
+  /* Toolbar selects (Set / Periode) tweaks for mobile */
+  .toolbar-select{position:relative;z-index:10003;min-width:110px;max-width:48%;}
+  /* On very small screens make selects full width and stacked */
+  @media (max-width:400px){
+    .toolbar-select{display:block; width:100% !important; max-width:100% !important;}
+  }
+
+  /* Chart wrapper to maintain spacing for legend on mobile */
+  .chart-wrapper{position:relative;height:300px;width:100%;padding:8px}
+  @media (max-width:400px){
+    .chart-wrapper{height:260px;padding:6px 6px 48px 6px} /* extra bottom padding for legend */
+  }
+
+  /* Ensure native select dropdown has top stacking when opened on some browsers */
+  .toolbar-select:focus{z-index:10005}
+
+  /* If browser respects overflow on select, limit visible options height (best-effort) */
+  .toolbar-select{max-height:40vh;overflow-y:auto}
+}
+
+
+/* Login page */
+.login-hero{min-height:100vh;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;background:linear-gradient(180deg,#0b2c4d 0%, #123c69 40%);}
+.login-hero::before{content:'';position:absolute;left:8%;top:20%;width:60vh;height:60vh;background:radial-gradient(circle at 30% 30%, rgba(41,171,226,0.35), rgba(18,60,105,0.15) 40%, rgba(11,44,77,0.0) 70%);transform:translate(-10%, -10%);filter:blur(30px);opacity:0.95}
+.login-hero::after{content:'';position:absolute;right:6%;bottom:10%;width:48vh;height:48vh;background:radial-gradient(circle at 60% 60%, rgba(247,148,29,0.45), rgba(247,148,29,0.12) 30%, rgba(11,44,77,0.0) 70%);filter:blur(40px);opacity:0.95}
+.login-card{width:520px;max-width:92%;background:#fff;border-radius:24px;padding:36px 40px;box-shadow:0 30px 60px rgba(18,60,105,0.14);border:1px solid rgba(227,234,243,0.6);position:relative;z-index:2}
+.login-logo{display:flex;align-items:center;gap:12px;margin-bottom:12px}
+.login-logo img{width:56px;height:56px;border-radius:12px}
+.login-note{font-size:13px;color:var(--bmc-muted);margin-top:8px}
+
+/* input with icon helper */
+.input-with-icon{position:relative;display:flex;align-items:center}
+.input-with-icon input{flex:1;padding-right:48px}
+.input-icon-btn{position:absolute;right:10px;display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:8px;background:transparent;border:none;color:var(--bmc-muted);cursor:pointer}
+.input-icon-btn:focus{outline:none;box-shadow:0 0 0 3px rgba(41,171,226,0.12);}
+
+/* ========================== DATA ATLET ============================= */
+/* small helpers */
+.text-muted{color:var(--bmc-muted)}
+.small{font-size:12px}
+
+/* Data Atlet */
+/* Fallback token, dipakai kalau variabel --navy dkk belum didefinisikan
+   di file CSS kamu. Kalau sudah ada, baris ini otomatis diabaikan. */
+:root{
+  --navy: #123C69;
+  --sky: #29ABE2;
+  --orange: #F7941D;
+  --bg: #F5F8FC;
+  --ink: #16232E;
+  --muted: #7186A0;
+  --line: #E3EAF3;
+  --radius: 12px;
+}
+
+/* ===== Page heading di dalam konten ===== */
+.page-title{
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--ink);
+  margin-bottom: 1.2rem;
+}
+
+/* ===== Panel / card pembungkus konten ===== */
+.panel{
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  overflow: hidden;
+  margin-bottom: 1.2rem;
+}
+.panel-head{
+  padding: 1rem 1.3rem;
+  border-bottom: 1px solid var(--line);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: .6rem;
+}
+.panel-head h3{
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--ink);
+  margin: 0;
+}
+.panel-body{ padding: 1.2rem 1.3rem; }
+
+/* ===== Form filter (Cari nama, Level, tombol Filter) ===== */
+.filter-form{
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: .9rem;
+}
+.filter-field label{
+  display: block;
+  font-size: .75rem;
+  font-weight: 600;
+  color: var(--muted);
+  margin-bottom: .3rem;
+}
+.filter-field input[type="text"],
+.filter-field select{
+  padding: .55rem .8rem;
+  border: 1.5px solid var(--line);
+  border-radius: 8px;
+  font-size: .85rem;
+  color: var(--ink);
+  background: #fff;
+  min-width: 180px;
+}
+.filter-field input:focus,
+.filter-field select:focus{
+  outline: none;
+  border-color: var(--sky);
+  box-shadow: 0 0 0 3px rgba(41,171,226,.15);
+}
+
+/* ===== Tombol ===== */
+.btn{
+  display: inline-flex;
+  align-items: center;
+  gap: .4rem;
+  padding: .55rem 1.1rem;
+  border-radius: 8px;
+  font-size: .82rem;
+  font-weight: 700;
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+  transition: .2s;
+}
+.btn-orange{ background: var(--orange); color: #fff; }
+.btn-orange:hover{ background: #e08215; color: #fff; }
+.btn-outline{ background: #fff; border: 1.5px solid var(--line); color: var(--ink); }
+.btn-outline:hover{ border-color: var(--sky); color: var(--sky); }
+.btn-sm{ padding: .35rem .75rem; font-size: .75rem; }
+
+/* ===== Tabel data ===== */
+.table-wrap{ overflow-x: auto; }
+table.data-table{
+  width: 100%;
+  border-collapse: collapse;
+  font-size: .87rem;
+}
+.data-table thead th{
+  text-align: left;
+  color: var(--muted);
+  font-weight: 700;
+  font-size: .72rem;
+  text-transform: uppercase;
+  letter-spacing: .5px;
+  padding: .7rem .6rem;
+  border-bottom: 2px solid var(--line);
+  white-space: nowrap;
+}
+.data-table tbody td{
+  padding: .8rem .6rem;
+  border-bottom: 1px solid var(--line);
+  color: var(--ink);
+  vertical-align: middle;
+}
+.data-table tbody tr:last-child td{ border-bottom: none; }
+.data-table tbody tr:hover{ background: var(--bg); }
+
+/* Avatar bulat inisial di kolom Foto */
+.avatar-sm{
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: var(--navy);
+  color: #fff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: .8rem;
+  overflow: hidden;
+}
+.avatar-sm img{ width: 100%; height: 100%; object-fit: cover; }
+
+/* Nama atlet sebagai link */
+.data-table a.row-link{
+  color: var(--navy);
+  font-weight: 700;
+  text-decoration: none;
+}
+.data-table a.row-link:hover{ color: var(--sky); text-decoration: underline; }
+
+/* ===== Badge level (warna beda tiap kelompok) ===== */
+.chip{
+  display: inline-block;
+  padding: .3rem .7rem;
+  border-radius: 20px;
+  font-size: .72rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+.chip-pemula{ background: #e7f0fa; color: var(--navy); }
+.chip-beginner{ background: #fdecd8; color: #a9600f; }
+.chip-senior{ background: #e9edf2; color: #42505e; }
+
+/* ===== Aksi (Edit / Hapus) ===== */
+.action-links{ display: flex; gap: .6rem; align-items: center; white-space: nowrap; }
+.action-links a.edit-link{
+  color: var(--sky);
+  font-weight: 700;
+  text-decoration: none;
+  font-size: .82rem;
+}
+.action-links a.edit-link:hover{ text-decoration: underline; }
+.action-links form{ display: inline; }
+.action-links .delete-btn{
+  background: #fbe4e4;
+  color: #c0392b;
+  border: none;
+  padding: .3rem .7rem;
+  border-radius: 6px;
+  font-size: .78rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+.action-links .delete-btn:hover{ background: #f6c9c9; }
+
+/* ===== Empty state ===== */
+.empty-state{
+  text-align: center;
+  padding: 3rem 1rem;
+  color: var(--muted);
+  font-size: .9rem;
+}
+
+/* ===== Alert/flash message ===== */
+.alert-success{
+  background: #e3f6ea;
+  border: 1px solid #b7e4c7;
+  color: #1c8a4a;
+  padding: .8rem 1.1rem;
+  border-radius: 10px;
+  font-size: .85rem;
+  margin-bottom: 1rem;
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 768px){
+  .panel-head{ flex-direction: column; align-items: flex-start; }
+  .filter-form{ width: 100%; }
+  .filter-field select,
+  .filter-field input[type="text"]{ min-width: 0; width: 100%; }
+}
+
+/* =============================================
+   TAMBAHAN CSS untuk halaman Absensi
+   ============================================= */
+
+:root{
+  --navy: #123C69;
+  --sky: #29ABE2;
+  --orange: #F7941D;
+  --bg: #F5F8FC;
+  --ink: #16232E;
+  --muted: #7186A0;
+  --line: #E3EAF3;
+}
+
+/* ===== Header halaman (judul + subjudul) ===== */
+.page-header{
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 1.4rem;
+}
+.page-header h2{
+  margin: 0;
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: var(--ink);
+}
+.page-header .subtitle{
+  color: var(--muted);
+  font-size: .85rem;
+  margin-top: .2rem;
+}
+
+/* ===== Form tanggal + tombol Tampilkan ===== */
+.date-filter{
+  display: flex;
+  align-items: center;
+  gap: .6rem;
+}
+.date-filter input[type="date"]{
+  padding: .55rem .8rem;
+  border: 1.5px solid var(--line);
+  border-radius: 8px;
+  font-size: .85rem;
+  color: var(--ink);
+  background: #fff;
+}
+.date-filter input[type="date"]:focus{
+  outline: none;
+  border-color: var(--sky);
+  box-shadow: 0 0 0 3px rgba(41,171,226,.15);
+}
+.btn-navy{
+  display: inline-flex;
+  align-items: center;
+  padding: .6rem 1.3rem;
+  border-radius: 8px;
+  font-size: .85rem;
+  font-weight: 700;
+  background: var(--navy);
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.btn-navy:hover{ background: #0B2C4D; }
+
+/* ===== Tab pilihan level (Pemula / Beginner / Senior) ===== */
+.level-tabs{
+  display: flex;
+  gap: .5rem;
+  margin-bottom: 1.2rem;
+  border-bottom: 1px solid var(--line);
+  padding-bottom: .8rem;
+}
+.level-tabs a{
+  padding: .5rem 1.1rem;
+  border-radius: 20px;
+  font-size: .82rem;
+  font-weight: 700;
+  color: var(--muted);
+  background: var(--bg);
+  text-decoration: none;
+}
+.level-tabs a:hover{ color: var(--navy); }
+.level-tabs a.active{
+  background: var(--navy);
+  color: #fff;
+}
+
+/* ===== Tabel absensi ===== */
+table.data-table{
+  width: 100%;
+  border-collapse: collapse;
+  font-size: .87rem;
+}
+.data-table thead th{
+  text-align: left;
+  color: var(--muted);
+  font-weight: 700;
+  font-size: .72rem;
+  text-transform: uppercase;
+  letter-spacing: .5px;
+  padding: .7rem .6rem;
+  border-bottom: 2px solid var(--line);
+}
+.data-table tbody td{
+  padding: .8rem .6rem;
+  border-bottom: 1px solid var(--line);
+  color: var(--ink);
+  vertical-align: middle;
+}
+.data-table tbody tr:last-child td{ border-bottom: none; }
+.data-table tbody tr:hover{ background: var(--bg); }
+
+/* ===== Status kehadiran: toggle bergaya pill, bukan radio bawaan browser ===== */
+.status-toggle{ display: flex; gap: .4rem; }
+.status-toggle label{ cursor: pointer; }
+.status-toggle input[type="radio"]{
+  position: absolute;
+  opacity: 0;
+  width: 0; height: 0;
+}
+.status-toggle .pill{
+  display: inline-block;
+  padding: .4rem .9rem;
+  border-radius: 20px;
+  border: 1.5px solid var(--line);
+  font-size: .78rem;
+  font-weight: 700;
+  color: var(--muted);
+  background: #fff;
+  transition: .15s;
+}
+.status-toggle input:checked + .pill.pill-hadir{
+  background: #1c8a4a; color: #fff; border-color: #1c8a4a;
+}
+.status-toggle label:hover .pill{ border-color: var(--sky); }
+
+/* ===== Tombol simpan ===== */
+.btn-orange{
+  display: inline-flex;
+  align-items: center;
+  padding: .6rem 1.4rem;
+  border-radius: 8px;
+  font-size: .85rem;
+  font-weight: 700;
+  background: var(--orange);
+  color: #fff;
+  border: none;
+  cursor: pointer;
+}
+.btn-orange:hover{ background: #e08215; }
+
+/* ===== Info tanggal kecil di bawah ===== */
+.info-note{
+  color: var(--muted);
+  font-size: .8rem;
+  margin-top: 1rem;
+}
+
+@media (max-width: 640px){
+  .page-header{ flex-direction: column; align-items: stretch; }
+  .date-filter{ width: 100%; }
+  .date-filter input[type="date"]{ flex: 1; }
+  .level-tabs{ flex-wrap: wrap; }
+  .status-toggle{ flex-wrap: wrap; }
+}
+
+/* Tambahan kecil untuk halaman Absensi */
+
+.form-footer{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: .8rem;
+  margin-top: 1.2rem;
+}
+
+/* Skip kalau sudah ada dari fix Data Atlet sebelumnya */
+.empty-state{
+  text-align: center;
+  padding: 3rem 1rem;
+  color: var(--muted, #7186A0);
+  font-size: .9rem;
+}
+
+.alert-success{
+  background: #e3f6ea;
+  border: 1px solid #b7e4c7;
+  color: #1c8a4a;
+  padding: .8rem 1.1rem;
+  border-radius: 10px;
+  font-size: .85rem;
+  margin-bottom: 1rem;
+}
+
+/* Tambahan warna pill untuk status Izin, Sakit, Alpha
+   (pill-hadir & pill-tidak yang lama sudah ada sebelumnya,
+   pill-tidak sekarang gak dipakai lagi, boleh dibiarkan atau dihapus) */
+
+.status-toggle input:checked + .pill.pill-izin{
+  background: #1f7cb4; color: #fff; border-color: #1f7cb4;
+}
+.status-toggle input:checked + .pill.pill-sakit{
+  background: #c48a12; color: #fff; border-color: #c48a12;
+}
+.status-toggle input:checked + .pill.pill-alpha{
+  background: #c0392b; color: #fff; border-color: #c0392b;
+}
+
+/* =============================================
+   TAMBAHAN CSS untuk halaman Program Latihan
+   ============================================= */
+
+:root{
+  --navy: #123C69;
+  --sky: #29ABE2;
+  --orange: #F7941D;
+  --bg: #F5F8FC;
+  --ink: #16232E;
+  --muted: #7186A0;
+  --line: #E3EAF3;
+}
+
+/* ===== Tag kecil untuk "Jenis" program (Lari, Footwork, dll) ===== */
+.tag-jenis{
+  display: inline-block;
+  padding: .25rem .65rem;
+  border-radius: 6px;
+  font-size: .74rem;
+  font-weight: 700;
+  background: #eef2f7;
+  color: var(--navy);
+}
+
+/* ===== Chip level (dipakai juga di halaman lain, kalau sudah ada skip) ===== */
+.chip{
+  display: inline-block;
+  padding: .3rem .7rem;
+  border-radius: 20px;
+  font-size: .72rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+.chip-pemula{ background: #e7f0fa; color: var(--navy); }
+.chip-beginner{ background: #fdecd8; color: #a9600f; }
+.chip-senior{ background: #e9edf2; color: #42505e; }
+
+/* ===== Daftar nama atlet yang di-assign, biar gak numpuk 1 baris panjang ===== */
+.atlet-tags{
+  display: flex;
+  flex-wrap: wrap;
+  gap: .3rem;
+  max-width: 320px;
+}
+.atlet-tags span{
+  background: var(--bg);
+  border: 1px solid var(--line);
+  color: var(--ink);
+  padding: .15rem .55rem;
+  border-radius: 12px;
+  font-size: .74rem;
+}
+.atlet-tags .more{
+  color: var(--sky);
+  font-weight: 700;
+  cursor: default;
+}
+
+/* ===== Tabel data (kalau belum ada dari halaman lain) ===== */
+.table-wrap{ overflow-x: auto; }
+table.data-table{
+  width: 100%;
+  border-collapse: collapse;
+  font-size: .87rem;
+}
+.data-table thead th{
+  text-align: left;
+  color: var(--muted);
+  font-weight: 700;
+  font-size: .72rem;
+  text-transform: uppercase;
+  letter-spacing: .5px;
+  padding: .7rem .6rem;
+  border-bottom: 2px solid var(--line);
+  white-space: nowrap;
+}
+.data-table tbody td{
+  padding: .8rem .6rem;
+  border-bottom: 1px solid var(--line);
+  color: var(--ink);
+  vertical-align: top;
+}
+.data-table tbody tr:last-child td{ border-bottom: none; }
+.data-table tbody tr:hover{ background: var(--bg); }
+
+/* ===== Aksi (Edit / Hapus) ===== */
+.action-links{ display: flex; gap: .6rem; align-items: center; white-space: nowrap; }
+.action-links a.edit-link{
+  color: var(--sky); font-weight: 700; text-decoration: none; font-size: .82rem;
+}
+.action-links a.edit-link:hover{ text-decoration: underline; }
+.action-links form{ display: inline; }
+.action-links .delete-btn{
+  background: #fbe4e4; color: #c0392b; border: none;
+  padding: .3rem .7rem; border-radius: 6px; font-size: .78rem; font-weight: 700; cursor: pointer;
+}
+.action-links .delete-btn:hover{ background: #f6c9c9; }
+
+/* ===== Tombol oranye (kalau belum ada) ===== */
+.btn-orange{
+  display: inline-flex; align-items: center; padding: .6rem 1.4rem;
+  border-radius: 8px; font-size: .85rem; font-weight: 700;
+  background: var(--orange); color: #fff; border: none; cursor: pointer; text-decoration: none;
+}
+.btn-orange:hover{ background: #e08215; color:#fff; }
+
+/* ===== Empty state ===== */
+.empty-state{ text-align: center; padding: 3rem 1rem; color: var(--muted); font-size: .9rem; }
+
+/* =============================================
+   TAMBAHAN CSS untuk form (Buat/Edit Program, dan form lain sejenis)
+   ============================================= */
+
+:root{
+  --navy: #123C69;
+  --sky: #29ABE2;
+  --orange: #F7941D;
+  --bg: #F5F8FC;
+  --ink: #16232E;
+  --muted: #7186A0;
+  --line: #E3EAF3;
+}
+
+.form-group{ margin-bottom: 1.2rem; }
+.form-group label{
+  display: block;
+  font-size: .85rem;
+  font-weight: 600;
+  color: var(--ink);
+  margin-bottom: .4rem;
+}
+.form-group input[type="text"],
+.form-group input[type="date"],
+.form-group select,
+.form-group textarea{
+  width: 100%;
+  padding: .65rem .85rem;
+  border: 1.5px solid var(--line);
+  border-radius: 8px;
+  font-size: .88rem;
+  font-family: inherit;
+  color: var(--ink);
+  background: #fff;
+}
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus{
+  outline: none;
+  border-color: var(--sky);
+  box-shadow: 0 0 0 3px rgba(41,171,226,.15);
+}
+.form-group textarea{ resize: vertical; }
+
+.field-hint{
+  font-size: .78rem;
+  color: var(--muted);
+  margin: -.1rem 0 .5rem;
+}
+.field-error{
+  color: #c0392b;
+  font-size: .78rem;
+  margin-top: .35rem;
+}
+
+/* Multi-select daftar atlet */
+.multi-select option{ padding: .4rem .5rem; }
+.multi-select option:checked{
+  background: var(--sky);
+  color: #fff;
+}
+
+/* Footer tombol form */
+.form-footer{
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 1.4rem;
+}
+
+/* FIX: input[type="number"] kelewatan dari rule lebar 100% sebelumnya,
+   makanya field "Umur" kelihatan kecil/kepotong. Tambahkan number ke daftar. */
+.form-group input[type="number"]{
+  width: 100%;
+  padding: .65rem .85rem;
+  border: 1.5px solid var(--line, #E3EAF3);
+  border-radius: 10px;
+  font-size: .88rem;
+  font-family: inherit;
+  color: var(--ink, #16232E);
+  background: #fff;
+}
+.form-group input[type="number"]:focus{
+  outline: none;
+  border-color: var(--sky, #29ABE2);
+  box-shadow: 0 0 0 3px rgba(41,171,226,.15);
+}
+
+/* Styling input file (foto atlet dll) - ditambah versi -webkit- juga
+   biar lebih pasti kepakai di semua versi Chrome/Edge */
+.file-input{
+  display: block;
+  font-size: .85rem;
+  color: var(--muted, #7186A0);
+}
+.file-input::file-selector-button,
+.file-input::-webkit-file-upload-button{
+  margin-right: .8rem;
+  padding: .5rem 1rem;
+  border-radius: 8px;
+  border: none;
+  background: var(--bg, #F5F8FC);
+  color: var(--navy, #123C69);
+  font-weight: 600;
+  font-size: .82rem;
+  cursor: pointer;
+}
+.file-input::file-selector-button:hover,
+.file-input::-webkit-file-upload-button:hover{
+  background: var(--line, #E3EAF3);
+}
+
+.pagination{
+  display: flex;
+  flex-wrap: wrap;
+  gap: .4rem;
+  margin-top: 1rem;
+}
+.page-btn{
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 36px;
+  height: 36px;
+  padding: 0 .7rem;
+  border-radius: 8px;
+  border: 1.5px solid var(--line, #E3EAF3);
+  background: #fff;
+  color: var(--ink, #16232E);
+  font-size: .82rem;
+  font-weight: 600;
+  text-decoration: none;
+}
+.page-btn:hover{
+  border-color: var(--sky, #29ABE2);
+  color: var(--sky, #29ABE2);
+}
+.page-btn.active{
+  background: var(--navy, #123C69);
+  border-color: var(--navy, #123C69);
+  color: #fff;
+}
+.page-btn.disabled{
+  color: var(--muted, #7186A0);
+  background: var(--bg, #F5F8FC);
+  cursor: default;
+}
+.pagination-info{
+  font-size: .78rem;
+  color: var(--muted, #7186A0);
+  margin-top: .6rem;
+}
+
+/* =============================================
+   TAMBAHAN CSS untuk halaman Detail Atlet
+   ============================================= */
+
+.back-link{
+  display: inline-block;
+  font-size: .82rem;
+  color: var(--muted, #7186A0);
+  text-decoration: none;
+  margin-bottom: 1.2rem;
+}
+.back-link:hover{ color: var(--navy, #123C69); }
+
+.profile-head{
+  display: flex;
+  align-items: center;
+  gap: 1.1rem;
+  margin-bottom: 1.6rem;
+}
+.avatar-lg{
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--navy, #123C69), var(--sky, #29ABE2));
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 1.6rem;
+  font-weight: 800;
+  flex-shrink: 0;
+}
+.profile-head h3{
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: var(--ink, #16232E);
+  margin: 0 0 .4rem;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+}
+
+.info-grid{
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.2rem;
+  margin-bottom: 1.6rem;
+  padding-bottom: 1.6rem;
+  border-bottom: 1px solid var(--line, #E3EAF3);
+}
+.info-item dt{
+  font-size: .75rem;
+  color: var(--muted, #7186A0);
+  margin-bottom: .25rem;
+}
+.info-item dd{
+  font-size: .92rem;
+  font-weight: 700;
+  color: var(--ink, #16232E);
+  margin: 0;
+}
+
+/* Dropdown kecil di toolbar (Set / Periode grafik) - bukan bagian form panjang */
+.toolbar-label{
+  font-size: .8rem;
+  color: var(--muted, #7186A0);
+  font-weight: 600;
+}
+.toolbar-select{
+  padding: .4rem .7rem;
+  border: 1.5px solid var(--line, #E3EAF3);
+  border-radius: 8px;
+  font-size: .82rem;
+  color: var(--ink, #16232E);
+  background: #fff;
+}
+.toolbar-select:focus{
+  outline: none;
+  border-color: var(--sky, #29ABE2);
+}
+
+@media (max-width: 640px){
+  .info-grid{ grid-template-columns: 1fr; }
+  .panel-head{ flex-direction: column; align-items: flex-start; gap: .8rem; }
+}
+
+/* Styling dasar tombol Ekspor CSV */
+.btn-sky {
+    display: inline-block;
+    padding: 6px 14px;
+    background-color: transparent; /* Atau warna dasar pilihan Anda, misal #29ABE2 */
+    color: #29ABE2;
+    border: 1px solid transparent; /* Border default transparan */
+    border-radius: 6px;
+    text-decoration: none;
+    transition: all 0.2s ease-in-out;
+}
+
+/* Effect saat cursor mengarah (Hover) */
+.btn-sky:hover {
+    background-color: rgba(41, 171, 226, 0.1); /* Background kotak tipis transparan */
+    border-color: #29ABE2;                     /* Menampilkan garis kotak (border) */
+    color: #123C69;                             /* Warna teks saat di-hover */
+    cursor: pointer;
+}
+
+/* Menyamakan panjang (width) dan kelengkungan (border-radius) semua input */
+.form-group input[type="text"],
+.form-group input[type="email"],
+.form-group input[type="password"],
+.form-group select,
+.form-group textarea {
+    width: 100%;                  /* Membuat lebar border konsisten seragam (penuh) */
+    box-sizing: border-box;       /* Mencegah overflow */
+    border: 1px solid #D1D5DB;    /* Warna border default abu-abu */
+    border-radius: 8px;           /* Menyamakan kelengkungan sudut (sesuaikan misal 6px/8px) */
+    padding: 10px 14px;           /* Menyamakan jarak bagian dalam */
+    font-size: 0.95rem;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* Efek saat input di-fokus / di-klik */
+.form-group input:focus,
+.form-group select:focus {
+    outline: none;
+    border-color: #29ABE2;
+    box-shadow: 0 0 0 3px rgba(41, 171, 226, 0.15);
+}
+
+/* Matikan indikator statis lama */
+.bmc-nav .active::before {
+  content: none !important;
+}
+
+.bmc-nav {
+  position: relative;
+}
+
+/* Indikator Garis Lurus Dinamis */
+.nav-indicator {
+  position: absolute;
+  left: 0;                     
+  width: 4px;                  
+  height: 32px;                
+  background-color: #F7941D;   
+  border-radius: 0 4px 4px 0;   
+  transition: top 0.25s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.2s ease;
+  pointer-events: none;
+  opacity: 0;
+  z-index: 10;
+}
+
+.form-group input[type="password"]{
+  width: 100%;
+  padding: .65rem .85rem;
+  border: 1.5px solid var(--line, #E3EAF3);
+  border-radius: 8px;
+  font-size: .88rem;
+  font-family: inherit;
+  color: var(--ink, #16232E);
+  background: #fff;
+}
+.form-group input[type="password"]:focus{
+  outline: none;
+  border-color: var(--sky, #29ABE2);
+  box-shadow: 0 0 0 3px rgba(41,171,226,.15);
+}
+
+/* Pastikan input di dalam .input-with-icon tetap ngambil sisa ruang
+   dan gak ketutupan tombol mata di kanan */
+.input-with-icon .form-group,
+.form-group .input-with-icon{ margin-bottom: 0; }
+.input-with-icon input[type="password"],
+.input-with-icon input[type="text"]{
+  padding-right: 48px;
+}
