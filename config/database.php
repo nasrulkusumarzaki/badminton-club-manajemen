@@ -43,6 +43,7 @@ return [
             'synchronous' => null,
             'transaction_mode' => 'DEFERRED',
         ],
+
         'mysql' => [
             'driver' => 'mysql',
             'url' => env('DB_URL'),
@@ -58,17 +59,6 @@ return [
             'prefix_indexes' => true,
             'strict' => true,
             'engine' => null,
-            'options' => extension_loaded('pdo_mysql') ? array_filter([
-                (defined('Pdo\Mysql::ATTR_SSL_CA') 
-                    ? \Pdo\Mysql::ATTR_SSL_CA 
-                    : \PDO::MYSQL_ATTR_SSL_CA) => env('MYSQL_ATTR_SSL_CA', base_path('certs/aiven-ca.pem')),
-
-                (defined('Pdo\Mysql::ATTR_SSL_VERIFY_SERVER_CERT') 
-                    ? \Pdo\Mysql::ATTR_SSL_VERIFY_SERVER_CERT 
-                    : \PDO::MYSQL_ATTR_SSL_VERIFY_SERVER_CERT) => false,
-
-                \PDO::ATTR_TIMEOUT => 5,
-            ]) : [],
         ],
 
         'mariadb' => [
@@ -86,11 +76,6 @@ return [
             'prefix_indexes' => true,
             'strict' => true,
             'engine' => null,
-            'options' => extension_loaded('pdo_mysql') ? array_filter([
-            (defined('Pdo\Mysql::ATTR_SSL_CA')
-            ? \Pdo\Mysql::ATTR_SSL_CA
-            : \PDO::MYSQL_ATTR_SSL_CA) => env('MYSQL_ATTR_SSL_CA'),
-            ]) : [],
         ],
 
         'pgsql' => [
