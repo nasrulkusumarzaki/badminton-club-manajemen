@@ -59,7 +59,17 @@
   <div class="card" style="margin-top:1.2rem;">
     <div class="panel-head" style="padding:0 0 1rem;border:none;">
       <h3 style="margin:0;font-family:'Plus Jakarta Sans',sans-serif;font-size:1.05rem;">Grafik Hasil Latihan</h3>
-      <div style="display:flex;align-items:center;gap:.8rem;">
+      <div style="display:flex;align-items:center;gap:.8rem;flex-wrap:wrap;">
+        <label class="toolbar-label">Program</label>
+        <select id="select-program" class="toolbar-select" title="Semua Program akan menggabungkan hasil dari beberapa program yang berbeda, sehingga konteks latihan bisa tercampur.">
+          <option value="all">Semua Program</option>
+          @foreach(($programHistory ?? []) as $programOption)
+            <option value="{{ $programOption['id'] }}" @selected(($defaultProgramId ?? null) !== null && (int) $programOption['id'] === (int) $defaultProgramId)>
+              {{ $programOption['nama'] }}
+            </option>
+          @endforeach
+        </select>
+
         <label class="toolbar-label">Set</label>
         <select id="select-set" class="toolbar-select">
           <option value="all">Semua Set</option>
@@ -191,6 +201,8 @@
     (function(){
         const raw = @json($hasilForJs ?? []);
         const NUM_SETS = 11;
+        const programSelect = document.getElementById('select-program');
+        const selectedProgramDefault = programSelect ? programSelect.value : 'all';
 
         function getWeekKey(dateStr){
             const d = new Date(dateStr + 'T00:00:00');
@@ -208,10 +220,16 @@
             return d.getUTCFullYear() + '-' + String(d.getUTCMonth()+1).padStart(2,'0');
         }
 
+        function getVisibleRows(){
+            const selectedProgram = programSelect ? String(programSelect.value) : 'all';
+            if (selectedProgram === 'all') return raw;
+            return raw.filter(row => String(row.program_id) === selectedProgram);
+        }
+
         // aggregate for a single set (existing behavior)
         function aggregateSingle(setIndex, period){
             const groups = {};
-            for(const row of raw){
+            for(const row of getVisibleRows()){
                 if(!row.tanggal) continue;
                 const key = period === 'month' ? getMonthKey(row.tanggal) : getWeekKey(row.tanggal);
                 const val = row.values[setIndex-1];
@@ -229,7 +247,7 @@
         // aggregate for all sets: returns labels and array of data arrays (per set)
         function aggregateAll(period){
             const groups = {}; // key -> {sums:[], counts:[]}
-            for(const row of raw){
+            for(const row of getVisibleRows()){
                 if(!row.tanggal) continue;
                 const key = period === 'month' ? getMonthKey(row.tanggal) : getWeekKey(row.tanggal);
                 if(!groups[key]) {
@@ -315,7 +333,6 @@
                         options: {
                             responsive: true,
                             maintainAspectRatio: false,
-                            // Legend bawaan dimatikan, dipakai custom legend yang scrollable
                             plugins: { legend: { display: false } },
                             layout: { padding: { bottom: 12 } },
                             scales: {
@@ -329,7 +346,6 @@
                     chart = new Chart(ctx, cfg);
                     buildCustomLegend();
                 } else {
-                    // numeric string or number
                     const idx = Number(setIndex);
                     const ga = aggregateSingle(idx, period);
                     const isNarrow = window.innerWidth <= 400;
@@ -363,7 +379,6 @@
                     if(chart) chart.destroy();
                     chart = new Chart(ctx, cfg);
 
-                    // sembunyikan legend custom saat mode per-set (tidak diperlukan)
                     if(legendEl){
                         legendEl.style.display = 'none';
                         legendEl.innerHTML = '';
@@ -374,8 +389,11 @@
             const setSelect = document.getElementById('select-set');
             const periodSelect = document.getElementById('select-period');
 
-            if(setSelect && periodSelect){
-                // initial render
+            if(setSelect && periodSelect && programSelect){
+                if (selectedProgramDefault && selectedProgramDefault !== 'all') {
+                    programSelect.value = selectedProgramDefault;
+                }
+
                 renderChart(String(setSelect.value), periodSelect.value);
 
                 setSelect.addEventListener('change', function(){
@@ -383,6 +401,9 @@
                 });
                 periodSelect.addEventListener('change', function(){
                     renderChart(String(setSelect.value), this.value);
+                });
+                programSelect.addEventListener('change', function(){
+                    renderChart(String(setSelect.value), periodSelect.value);
                 });
             }
         }

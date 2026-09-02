@@ -80,11 +80,22 @@ class AtletController extends Controller
                     ->orderBy('tanggal')
                     ->get();
 
+        $programHistory = $hasil->groupBy('program_id')->map(function ($items, $programId) {
+            return [
+                'id' => (int) $programId,
+                'nama' => $items->first()->program?->nama_program ?? 'Program ' . $programId,
+                'last_tanggal' => $items->max(fn ($row) => $row->tanggal ? $row->tanggal->toDateString() : null),
+            ];
+        })->sortByDesc('last_tanggal')->values();
+
+        $defaultProgramId = $programHistory->first()['id'] ?? null;
+
         // Prepare simplified data for Chart.js (avoid closures in Blade)
         $hasilForJs = $hasil->map(function($r){
             return [
-                'tanggal' => $r->tanggal ? $r->tanggal->toDateString() : null,
+                'program_id' => (int) ($r->program_id ?? 0),
                 'program' => $r->program->nama_program ?? null,
+                'tanggal' => $r->tanggal ? $r->tanggal->toDateString() : null,
                 'values' => [
                     $r->nilai_set_1, $r->nilai_set_2, $r->nilai_set_3, $r->nilai_set_4, $r->nilai_set_5,
                     $r->nilai_set_6, $r->nilai_set_7, $r->nilai_set_8, $r->nilai_set_9, $r->nilai_set_10, $r->nilai_set_11
@@ -92,7 +103,7 @@ class AtletController extends Controller
             ];
         })->toArray();
 
-        return view('layouts.atlets.show', compact('atlet', 'hasil', 'hasilForJs'));
+        return view('layouts.atlets.show', compact('atlet', 'hasil', 'hasilForJs', 'programHistory', 'defaultProgramId'));
     }
     /**
      * Tampilkan form edit atlet.

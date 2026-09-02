@@ -44,7 +44,38 @@ class ProgramController extends Controller
 
     public function show(Program $program)
     {
-        return view('layouts.programs.show', compact('program'));
+        $program->load(['atlets' => function ($query) {
+            $query->orderBy('nama');
+        }]);
+
+        $results = \App\Models\HasilLatihan::where('program_id', $program->id)
+            ->with('atlet')
+            ->orderBy('tanggal')
+            ->orderBy('atlet_id')
+            ->get();
+
+        $chartResults = $results->map(function ($row) {
+            return [
+                'atlet_id' => (int) $row->atlet_id,
+                'atlet_nama' => $row->atlet?->nama ?? 'Atlet ' . $row->atlet_id,
+                'tanggal' => $row->tanggal ? $row->tanggal->toDateString() : null,
+                'values' => [
+                    $row->nilai_set_1,
+                    $row->nilai_set_2,
+                    $row->nilai_set_3,
+                    $row->nilai_set_4,
+                    $row->nilai_set_5,
+                    $row->nilai_set_6,
+                    $row->nilai_set_7,
+                    $row->nilai_set_8,
+                    $row->nilai_set_9,
+                    $row->nilai_set_10,
+                    $row->nilai_set_11,
+                ],
+            ];
+        })->toArray();
+
+        return view('layouts.programs.show', compact('program', 'results', 'chartResults'));
     }
 
     public function edit(Program $program)
