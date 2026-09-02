@@ -80,13 +80,30 @@ class AtletController extends Controller
                     ->orderBy('tanggal')
                     ->get();
 
-        $programHistory = $hasil->groupBy('program_id')->map(function ($items, $programId) {
-            return [
-                'id' => (int) $programId,
-                'nama' => $items->first()->program?->nama_program ?? 'Program ' . $programId,
-                'last_tanggal' => $items->max(fn ($row) => $row->tanggal ? $row->tanggal->toDateString() : null),
-            ];
-        })->sortByDesc('last_tanggal')->values();
+        $programHistory = DB::table('programs')
+            ->join('atlet_program', 'programs.id', '=', 'atlet_program.program_id')
+            ->leftJoin('hasil_latihan', function ($join) use ($atlet) {
+                $join->on('programs.id', '=', 'hasil_latihan.program_id')
+                    ->where('hasil_latihan.atlet_id', $atlet->id);
+            })
+            ->where('atlet_program.atlet_id', $atlet->id)
+            ->select(
+                'programs.id',
+                'programs.nama_program as nama',
+                DB::raw('MAX(hasil_latihan.tanggal) as last_tanggal')
+            )
+            ->groupBy('programs.id', 'programs.nama_program')
+            ->orderByDesc(DB::raw('MAX(hasil_latihan.tanggal)'))
+            ->orderBy('programs.nama_program')
+            ->get()
+            ->map(function ($program) {
+                return [
+                    'id' => (int) $program->id,
+                    'nama' => $program->nama ?? 'Program ' . $program->id,
+                    'last_tanggal' => $program->last_tanggal ? \Carbon\Carbon::parse($program->last_tanggal)->toDateString() : null,
+                ];
+            })
+            ->values();
 
         $defaultProgramId = $programHistory->first()['id'] ?? null;
 
